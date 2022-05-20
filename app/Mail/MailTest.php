@@ -10,17 +10,16 @@ use Illuminate\Queue\SerializesModels;
 class MailTest extends Mailable
 {
     use Queueable, SerializesModels;
-
-    private $time;
+    public $subject;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($time)
+    public function __construct(string $subject)
     {
-        $this->time = $time;
+        $this->subject = $subject;
     }
 
     /**
@@ -30,16 +29,16 @@ class MailTest extends Mailable
      */
     public function build(): MailTest
     {
-        $subject = 'This eMailTest is a demo! ';
-        $address = 'pardeepkumar@example.com';
-        $name = 'Jane Doe';
+//        $subject = 'This eMailTest is a demo! ';
+        $address = 'email@example.com';
+        $name = 'Test eMail';
 
         return $this->from($address, $name)
                     ->cc($address, $name)
                     ->bcc($address, $name)
                     ->replyTo($address, $name)
-                    ->subject($subject . $this->time)
-                    ->tag($this->time)
+                    ->subject($this->subject)
+//                    ->tag($this->time)
                     ->markdown('welcome');
     }
 }
