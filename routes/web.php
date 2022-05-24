@@ -1,6 +1,11 @@
 <?php
 
+use App\Jobs\SendEmailJob;
+use App\Mail\MailTest;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\TelegramNotification;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,15 +26,22 @@ Route::get('/emailTest', function (){
     $ts = microtime(true);
 
     // Delay for send eMail
-    $emailJob = (new \App\Jobs\SendEmailJob())->delay(now()->addSeconds(5));
+    $emailJob = (new SendEmailJob())->delay(now()->addSeconds(5));
     dispatch($emailJob);
 
     // Send eMail now.
-    \Illuminate\Support\Facades\Mail::to('user@test.domain')->send(new \App\Mail\MailTest('Now'));
+    Mail::to('user@test.domain')->send(new MailTest('Now'));
     // put eMail to Queue
-    \Illuminate\Support\Facades\Mail::to('user@test.domain')->queue(new \App\Mail\MailTest('Queue'));
+    Mail::to('user@test.domain')->queue(new MailTest('Queue'));
 
     $spent = microtime(true) - $ts;
     // Job processing time
     echo 'All eMail sent. Time spent ' . sprintf('%.4f sec', $spent);
+});
+
+Route::get('/NotificationLaravelBoot', function ()
+{
+    $notifiable = config('services.telegram-bot-api.bot_id');
+    Notification::send($notifiable,new TelegramNotification('Notification message - '.now()) );
+
 });
