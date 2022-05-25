@@ -36,12 +36,27 @@ Route::get('/emailTest', function (){
 
     $spent = microtime(true) - $ts;
     // Job processing time
-    echo 'All eMail sent. Time spent ' . sprintf('%.4f sec', $spent);
+    echo 'All eMail are sent to the queue. Time spent ' . sprintf('%.4f sec', $spent);
 });
 
 Route::get('/NotificationLaravelBoot', function ()
 {
-    $notifiable = config('services.telegram-bot-api.bot_id');
-    Notification::send($notifiable,new TelegramNotification('Notification message - '.now()) );
+    $ts = microtime(true);
 
+    $notifiable = config('services.telegram-bot-api.bot_id');
+    for ($i = 0; $i < 5; $i++){
+        // Send message for Telegram
+        Notification::send($notifiable,new TelegramNotification('Notification message #'.$i.'- '.now()) );
+    }
+
+    $spent = microtime(true) - $ts;
+    // Job processing time
+    $message =  'All messages for Telegram are sent to the queue. Time spent ' . sprintf('%.4f sec', $spent);
+    Notification::send($notifiable,new TelegramNotification($message) );
+    echo $message;
+
+});
+
+Route::get('/EventStart',function (){
+    //
 });
