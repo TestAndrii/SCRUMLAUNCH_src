@@ -22,6 +22,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// emailTest
 Route::get('/emailTest', function (){
     $ts = microtime(true);
 
@@ -39,24 +40,38 @@ Route::get('/emailTest', function (){
     echo 'All eMail are sent to the queue. Time spent ' . sprintf('%.4f sec', $spent);
 });
 
+// NotificationLaravelBoot
 Route::get('/NotificationLaravelBoot', function ()
 {
     $ts = microtime(true);
 
-    $notifiable = config('services.telegram-bot-api.bot_id');
     for ($i = 0; $i < 5; $i++){
         // Send message for Telegram
-        Notification::send($notifiable,new TelegramNotification('Notification message #'.$i.'- '.now()) );
+        Notification::send("Notification send message", new TelegramNotification('Notification message #'.$i.'- '.now()) );
     }
 
     $spent = microtime(true) - $ts;
     // Job processing time
+    $notifiable = config('services.telegram-bot-api.bot_id');
     $message =  'All messages for Telegram are sent to the queue. Time spent ' . sprintf('%.4f sec', $spent);
     Notification::send($notifiable,new TelegramNotification($message) );
     echo $message;
 
 });
 
+// EventStart
 Route::get('/EventStart',function (){
-    //
+    $ts = microtime(true);
+
+    # Запуск события
+    event(new \App\Events\EventTest());
+
+
+    $spent = microtime(true) - $ts;
+
+    // Job processing time
+    $notifiable = config('services.telegram-bot-api.bot_id');
+    $message =  'Event sent to the queue. Time spent ' . sprintf('%.4f sec', $spent);
+//    Notification::send($notifiable,new TelegramNotification($message) );
+    echo "<br>".$message;
 });
