@@ -2,6 +2,7 @@
 
 use App\Jobs\SendEmailJob;
 use App\Mail\MailTest;
+use App\Events\EventTest;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
@@ -64,7 +65,7 @@ Route::get('/EventStart',function (){
     $ts = microtime(true);
 
     # Запуск события
-    event(new \App\Events\EventTest('Creating an event in a route.'));
+    event(new EventTest('Creating an event in a route.'));
 //    \Illuminate\Support\Facades\Log::info('Test Event Logger.');
 
 

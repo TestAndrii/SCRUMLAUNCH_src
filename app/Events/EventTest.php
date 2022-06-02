@@ -14,9 +14,9 @@ class EventTest
     /**
      * Create a new event instance.
      *
-     * @return void
+     * @param String $name
      */
-    public function __construct($name)
+    public function __construct(String $name)
     {
         $this->name = $name;
     }
