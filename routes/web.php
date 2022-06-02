@@ -64,14 +64,12 @@ Route::get('/EventStart',function (){
     $ts = microtime(true);
 
     # Запуск события
-    event(new \App\Events\EventTest());
+    event(new \App\Events\EventTest('Creating an event in a route.'));
+//    \Illuminate\Support\Facades\Log::info('Test Event Logger.');
 
-
-    $spent = microtime(true) - $ts;
 
     // Job processing time
-    $notifiable = config('services.telegram-bot-api.bot_id');
+    $spent = microtime(true) - $ts;
     $message =  'Event sent to the queue. Time spent ' . sprintf('%.4f sec', $spent);
-//    Notification::send($notifiable,new TelegramNotification($message) );
     echo "<br>".$message;
 });

@@ -6,8 +6,9 @@ use App\Events\EventTest;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\TelegramNotification;
 
-class MakeEventTestNotification
+class ListenerTest
 {
+    protected string $nameEvent;
     /**
      * Create the event listener.
      *
@@ -21,17 +22,21 @@ class MakeEventTestNotification
     /**
      * Handle the event.
      *
-     * @param  \App\Events\EventTest  $event
+     * @param EventTest $event
      * @return void
      */
     public function handle(EventTest $event): void
     {
-        $message = 'EventTest sent to the queue. '. now()->format('u') . ' mks.';
+        $this->nameEvent = $event->name;
+
+        $message = $this->nameEvent . "\n" . 'EventTest sent to the queue. ' . now();
         $notifiable = config('services.telegram-bot-api.bot_id');
 
+        // Send notification
         Notification::send($notifiable, new TelegramNotification($message) );
 
-        echo "<br>MakeEventTestNotification Listeners - " . get_class() . " = " . now()->format('u') . ' mks.';
+        echo "<br>New Events added in database with name: " . $this->nameEvent;
+        echo "<br>" . $message . "<br>";
 
     }
 }

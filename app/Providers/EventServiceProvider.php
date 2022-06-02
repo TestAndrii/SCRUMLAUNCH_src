@@ -3,9 +3,10 @@
 namespace App\Providers;
 
 use App\Events\EventTest;
-use App\Listeners\MakeEventTestNotification;
-use App\Notifications\TelegramNotification;
+use App\Listeners\ListenerTest;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Event;
+use function Illuminate\Events\queueable;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -15,12 +16,10 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
-        Registered::class => [
-            SendEmailVerificationNotification::class,
-        ],
         EventTest::class => [
-            MakeEventTestNotification::class,
+            ListenerTest::class,
         ],
+
     ];
 
     /**
@@ -30,7 +29,18 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-//
+        Event::listen(
+            EventTest::class,
+            [ListenerTest::class, 'handle']
+        );
+
+        Event::listen(queueable(function (EventTest $event){
+            echo "Event delay 10 sec.";
+        })->delay(now()->addSeconds(10)));
+
+        Event::listen('event.*', function ($eventName, array $data){
+            echo "Event all -> event.*";
+        });
     }
 
     /**
@@ -42,4 +52,5 @@ class EventServiceProvider extends ServiceProvider
     {
         return false;
     }
+
 }
