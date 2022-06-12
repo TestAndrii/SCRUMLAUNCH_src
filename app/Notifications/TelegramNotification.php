@@ -31,7 +31,7 @@ class TelegramNotification extends Notification implements ShouldQueue
      */
     public function via(mixed $notifiable): array
     {
-        return ['telegram'];
+        return [TelegramNotification::class];
     }
 
     /**

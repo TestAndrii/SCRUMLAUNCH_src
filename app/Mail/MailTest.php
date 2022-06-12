@@ -17,7 +17,7 @@ class MailTest extends Mailable
      *
      * @return void
      */
-    public function __construct(string $subject)
+    public function __construct(string $subject = 'This eMailTest is a demo! ')
     {
         $this->subject = $subject;
     }
@@ -29,7 +29,6 @@ class MailTest extends Mailable
      */
     public function build(): MailTest
     {
-//        $subject = 'This eMailTest is a demo! ';
         $address = 'email@example.com';
         $name = 'Test eMail';
 

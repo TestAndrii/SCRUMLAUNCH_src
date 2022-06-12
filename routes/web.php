@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\TelegramNotification;
+use App\Http\Controllers\MessagesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,4 +74,11 @@ Route::get('/EventStart',function (){
     $spent = microtime(true) - $ts;
     $message =  'Event sent to the queue. Time spent ' . sprintf('%.4f sec', $spent);
     echo "<br>".$message;
+});
+
+
+Route::get('sql', function (){
+    $user = \App\Models\User::all();
+    $jobs = \Illuminate\Support\Facades\DB::table('jobs')->get();
+    dd($user, $jobs);
 });
