@@ -78,7 +78,6 @@ Route::get('/EventStart',function (){
 
 
 Route::get('sql', function (){
-    $user = \App\Models\User::all();
-    $jobs = \Illuminate\Support\Facades\DB::table('jobs')->get();
-    dd($user, $jobs);
+    $migration = \Illuminate\Support\Facades\DB::table('migrationst')->get();
+//    ddd($migration);
 });

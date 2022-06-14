@@ -14,7 +14,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         //
     }
@@ -24,37 +24,35 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         DB::listen(function ($query) {
-            $query->sql; // выполненная sql-строка
-            $query->bindings; // параметры, переданные в запрос (то, что подменяет '?' в sql-строке)
-            $query->time; // время выполнения запроса
+//            $query->sql; // выполненная sql-строка
+//            $query->bindings; // параметры, переданные в запрос (то, что подменяет '?' в sql-строке)
+//            $query->time; // время выполнения запроса
 
             $location = collect(debug_backtrace())->filter(function ($trace) {
                 return !str_contains($trace['file'], 'vendor/');
             })->first(); // берем первый элемент не из каталога вендора
+//            Sql: $query->sql
 
             $bindings = implode(", ", $query->bindings); // форматируем привязку как строку
+            $message = "------------
 
-            $message = "
-           ------------
-           Sql: $query->sql
-           Bindings: $bindings
-           Time: $query->time
-           File: ${location['file']}
-           Line: ${location['line']}
-           ------------
-            ";
+               Bindings: $bindings
+               Time: $query->time
+               File: ${location['file']}
+               Line: ${location['line']}
+               ------------";
+
+            $message = str_replace("`", "", $message);
             Log::info($message);
 
+            // Пропускаем запросы к очередям и задачам.
             if (!str_contains($query->sql, 'jobs')){
-//                var_dump($query->sql);
                 # Запуск события
-            event(new EventTest($message));
+                event(new EventTest($message));
             }
-
-//            var_dump($location, $bindings);
         });
     }
 }
