@@ -46,12 +46,12 @@ class AppServiceProvider extends ServiceProvider
                ------------";
 
             $message = str_replace("`", "", $message);
-            Log::info($message);
+//            Log::info($message);
 
             // Пропускаем запросы к очередям и задачам.
             if (!str_contains($query->sql, 'jobs')){
                 # Запуск события
-                event(new EventTest($message));
+//                event(new EventTest($message));
             }
         });
     }

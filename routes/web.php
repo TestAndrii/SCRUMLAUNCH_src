@@ -78,6 +78,10 @@ Route::get('/EventStart',function (){
 
 
 Route::get('sql', function (){
-    $migration = \Illuminate\Support\Facades\DB::table('migrationst')->get();
-//    ddd($migration);
+    $migration = \Illuminate\Support\Facades\DB::table('migrations')->get();
+});
+
+Route::get('error', function (){
+    var_dump('rout-Error');
+    Route::redirects('local1','local2');
 });
