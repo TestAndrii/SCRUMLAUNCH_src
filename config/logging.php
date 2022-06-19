@@ -53,18 +53,22 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            'name' => 'channel-stack',
+            'channels' => ['single', 'daily'],
+//            'channels' => ['single'],
             'ignore_exceptions' => false,
         ],
 
         'single' => [
             'driver' => 'single',
+            'name' => 'channel-single',
             'path' => storage_path('logs/laravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
         ],
 
         'daily' => [
             'driver' => 'daily',
+            'name' => 'channel-daily',
             'path' => storage_path('logs/laravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
             'days' => 14,
@@ -101,11 +105,13 @@ return [
 
         'syslog' => [
             'driver' => 'syslog',
+            'name' => 'channel-syslog',
             'level' => env('LOG_LEVEL', 'debug'),
         ],
 
         'errorlog' => [
             'driver' => 'errorlog',
+            'name' => 'channel-errorlog',
             'level' => env('LOG_LEVEL', 'debug'),
         ],
 
@@ -115,7 +121,14 @@ return [
         ],
 
         'emergency' => [
+            'name' => 'channel-emergency',
             'path' => storage_path('logs/laravel.log'),
+        ],
+
+        'custom' => [
+            'driver' => 'custom',
+            'name' => 'channel-custom',
+            'via' => App\Logging\CreateCustomLogger::class,
         ],
     ],
 

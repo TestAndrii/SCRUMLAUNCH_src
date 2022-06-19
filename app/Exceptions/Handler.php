@@ -22,7 +22,7 @@ class Handler extends ExceptionHandler
      * @var array<int, class-string<\Throwable>>
      */
     protected $dontReport = [
-        //
+        \Illuminate\Database\Eloquent\ModelNotFoundException::class,
     ];
 
     /**
@@ -47,4 +47,21 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    /**
+     * Render an exception into an HTTP response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Exception  $e
+     * @return \Illuminate\Http\Response
+     */
+    public function render($request, Exception|Throwable $e)
+    {
+        if ($e instanceof \App\Exceptions\CustomException)  {
+            return $e->render($request);
+        }
+
+        return parent::render($request, $e);
+    }
+
 }

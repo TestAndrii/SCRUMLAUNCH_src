@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\TelegramNotification;
-use App\Http\Controllers\MessagesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -81,7 +80,7 @@ Route::get('sql', function (){
     $migration = \Illuminate\Support\Facades\DB::table('migrations')->get();
 });
 
-Route::get('error', function (){
-    var_dump('rout-Error');
-    Route::redirects('local1','local2');
+Route::get('exception', function (){
+    // something went wrong and you want to throw CustomException
+    throw new \App\Exceptions\CustomException('Something Went Wrong.');
 });
