@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\TelegramNotification;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,12 +76,31 @@ Route::get('/EventStart',function (){
     echo "<br>".$message;
 });
 
-
+// Выборка из базы migration
 Route::get('sql', function (){
     $migration = \Illuminate\Support\Facades\DB::table('migrations')->get();
 });
 
+// CustomException
 Route::get('exception', function (){
     // something went wrong and you want to throw CustomException
     throw new \App\Exceptions\CustomException('Something Went Wrong.');
+});
+
+// ModelNotFoundException + Service = https://laravel.demiart.ru/isklyucheniya-laravel-lovim-obrabatyvaem-i-sozdaem-sobstvennye/
+Route::get('ModelNotFoundException/users', [UserController::class, 'index'])->name('users.index');
+Route::post('ModelNotFoundException/search',  [UserController::class, 'search'])->name('users.search');
+
+Route::get('logging',function (){
+    $message = 'An informational Logging message. ';
+//    Log::emergency($message);
+//    Log::alert($message);
+//    Log::critical($message);
+//    Log::error($message);
+//    Log::warning($message);
+//    Log::notice($message);
+//    Log::info($message);
+    Log::debug($message);
+
+//    Log::channel('custom')->info('Something happened!');
 });
