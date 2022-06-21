@@ -54,7 +54,7 @@ return [
         'stack' => [
             'driver' => 'stack',
             'name' => 'channel-stack',
-            'channels' => ['single', 'daily'],
+            'channels' => ['single','telegram'],
 //            'channels' => ['single'],
             'ignore_exceptions' => false,
         ],
@@ -127,8 +127,18 @@ return [
 
         'custom' => [
             'driver' => 'custom',
-            'name' => 'channel-custom',
-            'via' => App\Logging\CreateCustomLogger::class,
+            'via' => \App\Logging\CreateCustomLogger::class,
+        ],
+
+        'telegram' => [
+          'driver' => 'monolog',
+          'handler' => \Monolog\Handler\TelegramBotHandler::class,
+          'with' => [
+            'apiKey' => env('TELEGRAM_BOT_TOKEN'),
+            'channel' => env('TELEGRAM_BOT_ID'),
+          ],
+          'level' => 'error',
+          'tap' => [App\Logging\CustomizeFormatter::class],
         ],
     ],
 

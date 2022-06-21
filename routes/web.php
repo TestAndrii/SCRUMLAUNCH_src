@@ -3,6 +3,7 @@
 use App\Jobs\SendEmailJob;
 use App\Mail\MailTest;
 use App\Events\EventTest;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
@@ -91,16 +92,23 @@ Route::get('exception', function (){
 Route::get('ModelNotFoundException/users', [UserController::class, 'index'])->name('users.index');
 Route::post('ModelNotFoundException/search',  [UserController::class, 'search'])->name('users.search');
 
+// Logging -> Telegram = https://qna.habr.com/q/556303
 Route::get('logging',function (){
-    $message = 'An informational Logging message. ';
+    $message = 'An informational Logging message in Telegram chanel. ';
 //    Log::emergency($message);
 //    Log::alert($message);
 //    Log::critical($message);
 //    Log::error($message);
+//      The channel telegram accepts messages higher than error.
 //    Log::warning($message);
 //    Log::notice($message);
 //    Log::info($message);
-    Log::debug($message);
+//    Log::debug($message);
 
-//    Log::channel('custom')->info('Something happened!');
+    // The channel telegram accepts messages higher than error.
+    // This message will not go through
+    Log::channel('telegram')->info('TELEGRAM. '. $message);
+    // make Error in BD
+    \Illuminate\Support\Facades\DB::table('users')->get('5');
+
 });
